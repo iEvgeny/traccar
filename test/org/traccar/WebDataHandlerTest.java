@@ -16,7 +16,7 @@ public class WebDataHandlerTest extends ProtocolTest {
                 Context.getIdentityManager(), null, null, "http://localhost/?fixTime={fixTime}&gprmc={gprmc}&name={name}", false);
 
         assertEquals(
-                "http://localhost/?fixTime=1451610123000&gprmc=$GPRMC,010203.000,A,2000.0000,N,03000.0000,E,0.00,0.00,010116,,*05&name=test",
+                "http://localhost/?fixTime=01012016:010203&gprmc=$GPRMC,010203.000,A,2000.0000,N,03000.0000,E,0.00,0.00,010116,,*05&name=test",
                 handler.formatRequest(p));
 
     }

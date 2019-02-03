@@ -18,10 +18,12 @@ package org.traccar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.assistedinject.Assisted;
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.database.IdentityManager;
 import org.traccar.helper.Checksum;
+import org.traccar.helper.UnitsConverter;
 import org.traccar.model.Device;
 import org.traccar.model.Position;
 import org.traccar.model.Group;
@@ -38,6 +40,7 @@ import java.util.Calendar;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.text.SimpleDateFormat;
 
 public class WebDataHandler extends BaseDataHandler {
 
@@ -108,20 +111,23 @@ public class WebDataHandler extends BaseDataHandler {
 
         Device device = identityManager.getById(position.getDeviceId());
 
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy:HHmmss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
         String request = url
                 .replace("{name}", URLEncoder.encode(device.getName(), StandardCharsets.UTF_8.name()))
-                .replace("{uniqueId}", device.getUniqueId())
+                .replace("{uniqueId}", Hex.encodeHexString(device.getUniqueId().getBytes(StandardCharsets.UTF_8)))
                 .replace("{status}", device.getStatus())
                 .replace("{deviceId}", String.valueOf(position.getDeviceId()))
                 .replace("{protocol}", String.valueOf(position.getProtocol()))
-                .replace("{deviceTime}", String.valueOf(position.getDeviceTime().getTime()))
-                .replace("{fixTime}", String.valueOf(position.getFixTime().getTime()))
+                .replace("{deviceTime}", String.valueOf(sdf.format(position.getDeviceTime().getTime())))
+                .replace("{fixTime}", String.valueOf(sdf.format(position.getFixTime().getTime())))
                 .replace("{valid}", String.valueOf(position.getValid()))
                 .replace("{latitude}", String.valueOf(position.getLatitude()))
                 .replace("{longitude}", String.valueOf(position.getLongitude()))
                 .replace("{altitude}", String.valueOf(position.getAltitude()))
-                .replace("{speed}", String.valueOf(position.getSpeed()))
-                .replace("{course}", String.valueOf(position.getCourse()))
+                .replace("{speed}", String.valueOf((int) UnitsConverter.kphFromKnots(position.getSpeed())))
+                .replace("{course}", String.valueOf((int) position.getCourse()))
                 .replace("{accuracy}", String.valueOf(position.getAccuracy()))
                 .replace("{statusCode}", calculateStatus(position));
 
