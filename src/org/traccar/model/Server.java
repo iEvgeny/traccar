@@ -166,4 +166,14 @@ public class Server extends ExtendedModel {
     public void setPoiLayer(String poiLayer) {
         this.poiLayer = poiLayer;
     }
+
+    private String trafficLayer;
+
+    public String getTrafficLayer() {
+        return trafficLayer;
+    }
+
+    public void setTrafficLayer(String trafficLayer) {
+        this.trafficLayer = trafficLayer;
+    }
 }
