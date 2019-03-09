@@ -14,6 +14,7 @@
 
     <addColumn tableName="tc_servers">
         <column name="trafficlayer" type="VARCHAR(128)" />
+        <column name="trafficurl" type="VARCHAR(512)" />
     </addColumn>
 
   </changeSet>

@@ -176,4 +176,14 @@ public class Server extends ExtendedModel {
     public void setTrafficLayer(String trafficLayer) {
         this.trafficLayer = trafficLayer;
     }
+
+    private String trafficUrl;
+
+    public String getTrafficUrl() {
+        return trafficUrl;
+    }
+
+    public void setTrafficUrl(String trafficUrl) {
+        this.trafficUrl = trafficUrl;
+    }
 }
